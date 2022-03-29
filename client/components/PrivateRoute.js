@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useGlobal } from '../contexts/GlobalContext'
 import { useRouter } from 'next/router'
 import { useAuth } from '../contexts/AuthContext'
+import { CircularProgress, Container } from '@mui/material'
 
 function PrivateRoute({ children }) {
   const { progress } = useGlobal()
@@ -26,7 +27,11 @@ function PrivateRoute({ children }) {
     <>
       {loading &&
         <>
-          Hang on...authenticating...
+          <Container className='my-5'>
+            <center>
+              <CircularProgress />
+            </center>
+          </Container>
         </>
       }
       {!loading && children}

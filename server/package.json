@@ -1,7 +1,7 @@
 {
-  "name": "your-app-server",
+  "name": "mcq-exams-server",
   "version": "1.0.0",
-  "description": "App server",
+  "description": "MCQ Exams server",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js"

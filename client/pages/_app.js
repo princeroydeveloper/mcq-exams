@@ -1,15 +1,36 @@
 import AuthProvider from '../contexts/AuthContext'
 import GlobalProvider from '../contexts/GlobalContext'
 import { ToastContainer } from 'react-toastify'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
+import { createTheme, ThemeProvider } from '@mui/material'
+import ProgressOverlay from '../components/ProgressOverlay'
 
-function MyApp({ Component, pageProps }) {
+function MCQExams({ Component, pageProps }) {
+  const customTheme = createTheme({
+    typography: {
+      'fontFamily': `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`,
+      'fontSize': 14,
+      'fontWeightLight': 300,
+      'fontWeightRegular': 400,
+      'fontWeightMedium': 500
+    },
+    palette: {
+      primary: {
+        main: '#3367D5'
+      }
+    }
+  })
+
   return (
     <>
       <GlobalProvider>
         <AuthProvider>
-          <Component {...pageProps} />
+          <ThemeProvider theme={customTheme}>
+            <ProgressOverlay />
+            <Component {...pageProps} />
+          </ThemeProvider>
         </AuthProvider>
       </GlobalProvider>
       <ToastContainer
@@ -28,4 +49,4 @@ function MyApp({ Component, pageProps }) {
   )
 }
 
-export default MyApp
+export default MCQExams

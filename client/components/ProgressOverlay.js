@@ -1,5 +1,6 @@
 import React from 'react'
 import { useGlobal } from '../contexts/GlobalContext'
+import { CircularProgress, Container } from '@mui/material'
 
 function ProgressOverlay() {
   const { progressOverlayRef } = useGlobal()
@@ -7,7 +8,11 @@ function ProgressOverlay() {
   return (
     <>
       <div id='overlay' ref={progressOverlayRef}>
-        Progress Overlay...
+        <Container className='my-5'>
+          <center>
+            <CircularProgress />
+          </center>
+        </Container>
       </div>
     </>
   )
