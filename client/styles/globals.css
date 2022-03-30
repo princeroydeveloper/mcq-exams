@@ -41,20 +41,6 @@ a {
   cursor: pointer;
 }
 
-.q-card {
-  animation-name: q-card-animate;
-  animation-duration: 0.5s;
-}
-
 .q-card:hover {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-@keyframes q-card-animate {
-  0% {
-    transform: translateY(-15%);
-  }
-  100% {
-    transform: translateY(0%);
-  }
 }

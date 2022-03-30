@@ -7,6 +7,7 @@ import '../styles/globals.css'
 import { createTheme, ThemeProvider } from '@mui/material'
 import ProgressOverlay from '../components/ProgressOverlay'
 import QuestionPaperProvider from '../contexts/QuestionPaperContext'
+import QuestionProvider from '../contexts/QuestionContext'
 
 function MCQExams({ Component, pageProps }) {
   const customTheme = createTheme({
@@ -19,7 +20,7 @@ function MCQExams({ Component, pageProps }) {
     },
     palette: {
       primary: {
-        main: '#3367D5'
+        main: '#001b94'
       }
     }
   })
@@ -29,10 +30,12 @@ function MCQExams({ Component, pageProps }) {
       <GlobalProvider>
         <AuthProvider>
           <QuestionPaperProvider>
-            <ThemeProvider theme={customTheme}>
-              <ProgressOverlay />
-              <Component {...pageProps} />
-            </ThemeProvider>
+            <QuestionProvider>
+              <ThemeProvider theme={customTheme}>
+                <ProgressOverlay />
+                <Component {...pageProps} />
+              </ThemeProvider>
+            </QuestionProvider>
           </QuestionPaperProvider>
         </AuthProvider>
       </GlobalProvider>

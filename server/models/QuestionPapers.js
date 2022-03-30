@@ -11,7 +11,8 @@ const QuestionPaperSchema = new mongoose.Schema({
   },
   total_questions: {
     type: Number,
-    default: 0
+    default: 0,
+    required: true
   },
   timestamp: {
     type: Date,

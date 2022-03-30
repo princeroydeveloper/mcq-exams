@@ -31,7 +31,7 @@ const SignIn = () => {
                   <small className='text-muted text-center'>The best exam environment for students & teachers</small>
                 </center>
                 <center className='mb-5 mt-4'>
-                  <Flaky style={{ fontSize: '60px', color: '#3367D5' }} />
+                  <Flaky style={{ fontSize: '60px', color: '#001b94' }} />
                 </center>
                 <TextField variant='outlined' fullWidth label='Email' className='mb-4' value={email} onChange={e => setEmail(e.target.value)} />
                 <TextField variant='outlined' type='password' fullWidth label='Password' className='mb-2' value={password} onChange={e => setPassword(e.target.value)} />

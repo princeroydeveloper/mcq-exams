@@ -22,6 +22,7 @@ connectToMongo()
 // Routes
 app.use('/auth', require('./routes/auth'))
 app.use('/question_paper', require('./routes/question_paper'))
+app.use('/question', require('./routes/question'))
 
 app.listen(PORT, () => {
   console.log(`Server up at ${PORT}`)

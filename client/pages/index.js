@@ -6,6 +6,7 @@ import { Quiz, Search, LiveHelp } from '@mui/icons-material'
 import { DeleteModal, NewModal } from '../components/QuestionPaperModal'
 import { useQuestionPaper } from '../contexts/QuestionPaperContext'
 import SpeedDialComponent from '../components/SpeedDialComponent'
+import { v4 as uuidv4 } from 'uuid'
 
 const TeachersHome = () => {
   const { setNewModal, qps, setPaper_data, setDelModal } = useQuestionPaper()
@@ -30,15 +31,15 @@ const TeachersHome = () => {
               <>
                 {qps.map(qp => {
                   return (
-                    <Card style={{ width: '18rem' }} variant='outlined' className='q-card p-2 mx-3 mb-3'>
+                    <Card style={{ width: '18rem' }} variant='outlined' className='q-card p-2 mx-3 mb-3' key={uuidv4()}>
                       <CardContent>
                         <h5 className='text-truncate'>{qp.name}</h5>
                         <p className='text-muted text-truncate'>{qp.total_questions} questions</p>
                         <Button variant='outlined' size='small' onClick={() => {
                           return window.open(`/edit/${qp._id}`)
-                        }}>Edit</Button>
-                        <Button variant='outlined' size='small' className='mx-2' color='secondary'>Rename</Button>
-                        <Button variant='outlined' size='small' className='mx-1' color='error' onClick={() => {
+                        }}>Edit</Button>&nbsp;&nbsp;
+                        <Button variant='outlined' size='small' color='secondary'>Rename</Button>&nbsp;&nbsp;
+                        <Button variant='outlined' size='small' color='error' onClick={() => {
                           setPaper_data(qp)
                           return setDelModal(true)
                         }}>Delete</Button>

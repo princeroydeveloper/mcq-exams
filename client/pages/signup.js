@@ -34,7 +34,7 @@ const Signup = () => {
                   <small className='text-muted text-center'>The best exam environment for students & teachers</small>
                 </center>
                 <center className='mb-5 mt-4'>
-                  <Flaky style={{ fontSize: '60px', color: '#3367D5' }} />
+                  <Flaky style={{ fontSize: '60px', color: '#001b94' }} />
                 </center>
                 <TextField variant='outlined' fullWidth label='First Name' className='mb-4' value={fname} onChange={e => setFname(e.target.value)} />
                 <TextField variant='outlined' fullWidth label='Last Name' className='mb-4' value={lname} onChange={e => setLname(e.target.value)} />

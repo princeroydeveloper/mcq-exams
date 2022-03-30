@@ -32,7 +32,7 @@ const Profile = () => {
                   <small className='text-muted text-center'>The best exam environment for students & teachers</small>
                 </center>
                 <center className='mb-5 mt-4'>
-                  <Flaky style={{ fontSize: '60px', color: '#3367D5' }} />
+                  <Flaky style={{ fontSize: '60px', color: '#001b94' }} />
                 </center>
                 <p className='text-center'>Name: <strong>{currentUser.fname} {currentUser.lname}</strong></p>
                 <p className='text-center'>Email: <strong>{currentUser.email}</strong></p>
