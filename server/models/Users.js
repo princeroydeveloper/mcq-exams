@@ -21,6 +21,15 @@ const UserSchema = new mongoose.Schema({
   passwordLegacy: {
     type: String,
     required: true
+  },
+  role: {
+    type: String,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+    required: true
   }
 }, { collection: 'users' })
 

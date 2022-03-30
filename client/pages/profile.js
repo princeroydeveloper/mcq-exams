@@ -3,9 +3,12 @@ import { useState } from "react"
 import PrivateRoute from "../components/PrivateRoute"
 import { useAuth } from "../contexts/AuthContext"
 import { useGlobal } from "../contexts/GlobalContext"
+import { Button, Container, Slide, Card, CardContent, TextField } from '@mui/material'
+import { Flaky } from '@mui/icons-material'
+import TakeMe from "../components/TakeMe"
 
 const Profile = () => {
-  const { btnDisabled } = useGlobal()
+  const { btnDisabled, progress } = useGlobal()
   const { currentUser } = useAuth()
   const [oldPass, setOldPass] = useState('')
   const [newPass, setNewPass] = useState('')
@@ -14,22 +17,44 @@ const Profile = () => {
   return (
     <>
       <Head>
-        <title>Profile - Your App</title>
+        <title>Profile - MCQ Exams</title>
       </Head>
       <PrivateRoute>
-        Name: <strong>{currentUser.fname} {currentUser.lname}</strong>
-        <br />
-        Email: <strong>{currentUser.email}</strong>
-        <br /><br /><br />
-        <input type="password" placeholder="Old Password" value={oldPass} onChange={e => setOldPass(e.target.value)} />
-        <br />
-        <input type="password" placeholder="New Password" value={newPass} onChange={e => setNewPass(e.target.value)} />
-        <br />
-        <input type="password" placeholder="Confirm New Password" value={cNewPass} onChange={e => setCNewPass(e.target.value)} /><br /><br />
-        <button onClick={() => {
-          currentUser.changePassword(oldPass, newPass, cNewPass)
-        }} disabled={btnDisabled}>Change Password</button><br /><br />
-        <button onClick={currentUser.signOut} disabled={btnDisabled}>SignOut</button>
+        <Slide direction='down' in={true}>
+          <Container className='my-5' style={{ maxWidth: '400px' }}>
+            <Card className='p-4'>
+              <CardContent component='form' autoComplete='off' onSubmit={e => {
+                e.preventDefault()
+                signIn(email, password)
+              }}>
+                <h3 className='text-center mb-2'>Profile - MCQ Exams</h3>
+                <center>
+                  <small className='text-muted text-center'>The best exam environment for students & teachers</small>
+                </center>
+                <center className='mb-5 mt-4'>
+                  <Flaky style={{ fontSize: '60px', color: '#3367D5' }} />
+                </center>
+                <p className='text-center'>Name: <strong>{currentUser.fname} {currentUser.lname}</strong></p>
+                <p className='text-center'>Email: <strong>{currentUser.email}</strong></p>
+                <p className='text-center mb-5'>Role: <strong>{currentUser.role}</strong></p>
+                <TextField variant='outlined' type='password' fullWidth label='Old Password' className='mb-4' value={oldPass} onChange={e => setOldPass(e.target.value)} />
+                <TextField variant='outlined' type='password' fullWidth label='New Password' className='mb-4' value={newPass} onChange={e => setNewPass(e.target.value)} />
+                <TextField variant='outlined' type='password' fullWidth label='Confirm New Password' className='mb-4' value={cNewPass} onChange={e => setCNewPass(e.target.value)} />
+                <Button variant='contained' disabled={btnDisabled} onClick={() => currentUser.changePassword(oldPass, newPass, cNewPass)}>Change Password</Button>
+                <br /><br /><br />
+                <TakeMe path='/' fullReload={true}>
+                  <Button className='float-start' variant='text' color='secondary' disabled={btnDisabled}>Back</Button>
+                </TakeMe>
+                <Button className='float-end' variant='text' disabled={btnDisabled} onClick={() => {
+                  progress.show()
+                  return setTimeout(() => {
+                    currentUser.signOut()
+                  }, 800)
+                }}>Sign Out</Button>
+              </CardContent>
+            </Card>
+          </Container>
+        </Slide>
       </PrivateRoute>
     </>
   )

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 import { createTheme, ThemeProvider } from '@mui/material'
 import ProgressOverlay from '../components/ProgressOverlay'
+import QuestionPaperProvider from '../contexts/QuestionPaperContext'
 
 function MCQExams({ Component, pageProps }) {
   const customTheme = createTheme({
@@ -27,10 +28,12 @@ function MCQExams({ Component, pageProps }) {
     <>
       <GlobalProvider>
         <AuthProvider>
-          <ThemeProvider theme={customTheme}>
-            <ProgressOverlay />
-            <Component {...pageProps} />
-          </ThemeProvider>
+          <QuestionPaperProvider>
+            <ThemeProvider theme={customTheme}>
+              <ProgressOverlay />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </QuestionPaperProvider>
         </AuthProvider>
       </GlobalProvider>
       <ToastContainer

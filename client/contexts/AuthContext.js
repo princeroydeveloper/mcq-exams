@@ -71,6 +71,51 @@ function AuthProvider({ children }) {
     }
   }
 
+  async function signUp(email, password, fname, lname, role) {
+    try {
+      setBtnDisabled(true)
+      const req = await fetch(`${API_DOMAIN}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, fname, lname, role })
+      })
+      const stats = req.status
+      const res = await req.json()
+      if (stats === 400) {
+        if (res.errors) {
+          setBtnDisabled(false)
+          return toast.error(res.errors[0].msg)
+        } else if (res.error) {
+          setBtnDisabled(false)
+          return toast.error(res.error)
+        }
+        setBtnDisabled(false)
+        return toast.error('An unexpected error occurred...')
+      } else if (stats === 401 && res.error) {
+        setBtnDisabled(false)
+        return toast.error(res.error)
+      } else if (stats === 200 && res.success) {
+        localStorage.setItem(LOCAL_STORAGE_AUTH_TOKEN_KEY, res.success)
+        toast.success(res.message)
+        toast.success('Redirecting to dashboard in a moment...')
+        return setTimeout(() => {
+          window.location.href = '/'
+        }, 2000)
+      } else if (stats === 500) {
+        setBtnDisabled(false)
+        return toast.error(res.error)
+      } else {
+        setBtnDisabled(false)
+        return toast.error('An unexpected error occurred...')
+      }
+    } catch (error) {
+      console.error(error)
+      return toast.error('An unexpected error occurred')
+    }
+  }
+
   async function changePasswordUser(oldPass, newPass, cnewPass) {
     try {
       setBtnDisabled(true)
@@ -165,7 +210,7 @@ function AuthProvider({ children }) {
   const values = {
     LOCAL_STORAGE_AUTH_TOKEN_KEY,
     currentUser,
-    signIn, forgotPassword
+    signIn, forgotPassword, signUp
   }
 
   return (

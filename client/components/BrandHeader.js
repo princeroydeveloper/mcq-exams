@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import TakeMe from './TakeMe';
 import { useGlobal } from '../contexts/GlobalContext';
 
-export default function BrandHeader() {
+export default function BrandHeader({ title }) {
   const { currentUser } = useAuth()
   const { progress } = useGlobal()
 
@@ -19,7 +19,7 @@ export default function BrandHeader() {
         <Toolbar>
           <Flaky className='mx-2' style={{ fontSize: '35px' }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            MCQ Exams
+            {title} - MCQ Exams
           </Typography>
           <TakeMe fullReload={true} path='/profile'>
             <Button color="inherit" className='mx-2'>Profile</Button>
