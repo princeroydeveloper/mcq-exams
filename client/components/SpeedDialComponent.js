@@ -5,7 +5,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import { Fab } from '@mui/material';
 
-export default function SpeedDialComponent({ actions, mainClick }) {
+export default function SpeedDialComponent({ actions, mainClick, title }) {
   return (
     <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
       {actions &&
@@ -31,7 +31,7 @@ export default function SpeedDialComponent({ actions, mainClick }) {
           variant='extended'
         >
           <SpeedDialIcon sx={{ mr: 1 }} />
-          Question paper
+          {title}
         </Fab>
       }
     </Box>

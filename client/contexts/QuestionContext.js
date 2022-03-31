@@ -99,8 +99,9 @@ function QuestionProvider({ children }) {
   }
   const [state, dispatch] = useReducer(reducer, initialState)
   const [totalNo, setTotalNo] = useState([])
+  const [paperId, setPaperId] = useState('')
 
-  async function save() {
+  async function saveQuestion() {
     try {
       setBtnDisabled(true)
       const req = await fetch(`${API_DOMAIN}/question/save`, {
@@ -127,7 +128,51 @@ function QuestionProvider({ children }) {
         return currentUser.signOut()
       } else if (stats === 200 && res.success) {
         setBtnDisabled(false)
-        dispatch({ type: 'update_question_id', payload: { value: res.question_id } })
+        dispatch({ type: 'set_data', payload: res.data })
+        setTotalNo(res.total)
+        return toast.success(res.success)
+      } else if (stats === 500) {
+        setBtnDisabled(false)
+        return toast.error(res.error)
+      } else {
+        setBtnDisabled(false)
+        return toast.error('An unexpected error occurred...')
+      }
+    } catch (error) {
+      setBtnDisabled(false)
+      console.error(error)
+      return toast.error('An unexpected error occurred')
+    }
+  }
+
+  async function deleteQuestion() {
+    try {
+      setBtnDisabled(true)
+      const req = await fetch(`${API_DOMAIN}/question/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+        },
+        body: JSON.stringify({ qp_id: state.qp_id, question_id: state.question_id })
+      })
+      const stats = req.status
+      const res = await req.json()
+      if (stats === 400) {
+        if (res.errors) {
+          setBtnDisabled(false)
+          return toast.error(res.errors[0].msg)
+        } else if (res.error) {
+          setBtnDisabled(false)
+          return toast.error(res.error)
+        }
+        setBtnDisabled(false)
+        return toast.error('An unexpected error occurred...')
+      } else if (stats === 401 && res.error) {
+        return currentUser.signOut()
+      } else if (stats === 200 && res.success) {
+        setBtnDisabled(false)
+        dispatch({ type: 'discard' })
         setTotalNo(res.total)
         return toast.success(res.success)
       } else if (stats === 500) {
@@ -180,7 +225,8 @@ function QuestionProvider({ children }) {
         return currentUser.signOut()
       } else if (stats === 200 && res.total) {
         progress.hide()
-        return setTotalNo(res.total)
+        setTotalNo(res.total)
+        return setPaperId(res.paper_id)
       } else if (stats === 500) {
         progress.hide()
         toast.error(res.error)
@@ -204,7 +250,7 @@ function QuestionProvider({ children }) {
     }
   }
 
-  async function get(question_id) {
+  async function getQuestion(question_id) {
     try {
       progress.show()
       const req = await fetch(`${API_DOMAIN}/question/get`, {
@@ -249,8 +295,8 @@ function QuestionProvider({ children }) {
 
   const values = {
     state, dispatch,
-    save, getPaper, get,
-    totalNo
+    saveQuestion, getPaper, getQuestion, deleteQuestion,
+    totalNo, paperId
   }
 
   return (

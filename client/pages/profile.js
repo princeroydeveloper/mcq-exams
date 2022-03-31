@@ -42,7 +42,7 @@ const Profile = () => {
                 <TextField variant='outlined' type='password' fullWidth label='Confirm New Password' className='mb-4' value={cNewPass} onChange={e => setCNewPass(e.target.value)} />
                 <Button variant='contained' disabled={btnDisabled} onClick={() => currentUser.changePassword(oldPass, newPass, cNewPass)}>Change Password</Button>
                 <br /><br /><br />
-                <TakeMe path='/' fullReload={true}>
+                <TakeMe path={currentUser.role === 'teacher' ? '/' : '/join'} fullReload={true}>
                   <Button className='float-start' variant='text' color='secondary' disabled={btnDisabled}>Back</Button>
                 </TakeMe>
                 <Button className='float-end' variant='text' disabled={btnDisabled} onClick={() => {

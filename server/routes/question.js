@@ -14,7 +14,6 @@ router.post('/save', validateTeacher, [
   body('opt_c', 'Please enter option C').trim().isLength({ min: 1 }),
   body('opt_d', 'Please enter option D').trim().isLength({ min: 1 }),
   body('correct_opt', 'Please choose correct option').trim().isLength({ min: 1 }),
-  body('marks', 'Please enter marks of the question').trim().isLength({ min: 1 }),
   body('qp_id', 'Request processing error...').trim().isLength({ min: 1 })
 ], async (req, res) => {
   try {
@@ -28,6 +27,14 @@ router.post('/save', validateTeacher, [
     if (requiredQp) {
       // Save Question to database
       if (req.body.question_id !== '') {
+        let marks_assigned = 0
+        if (!isNaN(parseFloat(req.body.marks))) {
+          if (parseFloat(req.body.marks) < 0) {
+            marks_assigned = 0
+          } else {
+            marks_assigned = parseFloat(req.body.marks)
+          }
+        }
         const updatedQuestion = await Question.findOneAndUpdate({ uid: ObjectId(req.user.uid), _id: ObjectId(req.body.question_id), qp_id: ObjectId(req.body.qp_id) }, {
           question: req.body.question.trim(),
           opt_a: req.body.opt_a.trim(),
@@ -35,13 +42,21 @@ router.post('/save', validateTeacher, [
           opt_c: req.body.opt_c.trim(),
           opt_d: req.body.opt_d.trim(),
           correct_opt: req.body.correct_opt.trim(),
-          marks: parseFloat(req.body.marks.trim())
-        })
-        const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1 })
+          marks: marks_assigned
+        }, { new: true })
+        const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1, marks: 1 })
         if (updatedQuestion) {
-          return res.json({ success: 'Question saved!', total: all_questions_ids, question_id: updatedQuestion._id })
+          return res.json({ success: 'Question saved!', total: all_questions_ids, data: updatedQuestion })
         }
         return res.status(400).json({ error: 'Error occurred while saving question.' })
+      }
+      let marks_assigned = 0
+      if (!isNaN(parseFloat(req.body.marks))) {
+        if (parseFloat(req.body.marks) < 0) {
+          marks_assigned = 0
+        } else {
+          marks_assigned = parseFloat(req.body.marks)
+        }
       }
       const newQuestion = await Question.create({
         question: req.body.question.trim(),
@@ -50,14 +65,14 @@ router.post('/save', validateTeacher, [
         opt_c: req.body.opt_c.trim(),
         opt_d: req.body.opt_d.trim(),
         correct_opt: req.body.correct_opt.trim(),
-        marks: parseFloat(req.body.marks.trim()),
+        marks: marks_assigned,
         uid: req.user.uid,
         qp_id: req.body.qp_id.trim()
       })
       if (newQuestion) {
         await QuestionPaper.findOneAndUpdate({ uid: ObjectId(req.user.uid), _id: ObjectId(req.body.qp_id) }, { $inc: { total_questions: 1 } }, { new: true })
-        const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1 })
-        return res.json({ success: 'Question saved!', total: all_questions_ids, question_id: newQuestion._id })
+        const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1, marks: 1 })
+        return res.json({ success: 'Question saved!', total: all_questions_ids, data: newQuestion })
       }
       return res.status(400).json({ error: 'Error occurred while saving question.' })
     }
@@ -90,20 +105,28 @@ router.post('/get', validateTeacher, [
   }
 })
 
-// router.post('/delete', validateTeacher, [
-//   body('qp_id', 'Request processing error...').trim().isLength({ min: 1 })
-// ], async (req, res) => {
-//   try {
-//     // Finds error in validation and return bad request
-//     const errors = validationResult(req)
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() })
-//     }
-//     // Proceed further
-//   } catch (error) {
-//     console.error(error)
-//     return res.status(500).json({ error: 'Internal Server Error' })
-//   }
-// })
+router.post('/delete', validateTeacher, [
+  body('qp_id', 'Request processing error...').trim().isLength({ min: 1 }),
+  body('question_id', 'Request processing error...').trim().isLength({ min: 1 })
+], async (req, res) => {
+  try {
+    // Finds error in validation and return bad request
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // Proceed further
+    const deletedQuestion = await Question.findOneAndDelete({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id), _id: ObjectId(req.body.question_id) })
+    if (deletedQuestion) {
+      await QuestionPaper.findOneAndUpdate({ uid: ObjectId(req.user.uid), _id: ObjectId(req.body.qp_id) }, { $inc: { total_questions: -1 } })
+      const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1, marks: 1 })
+      return res.json({ success: 'Question deleted!', total: all_questions_ids })
+    }
+    return res.status(400).json({ error: 'Error occurred while deleting question.' })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
 
 module.exports = router

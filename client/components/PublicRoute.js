@@ -14,7 +14,10 @@ function PublicRoute({ children }) {
     progress.hide()
     try {
       if (Object.keys(currentUser).length > 0) {
-        return router.replace('/')
+        if (currentUser.role === 'teacher') {
+          return router.replace('/')
+        }
+        return router.replace('/join')
       }
       return setLoading(false)
     } catch (error) {

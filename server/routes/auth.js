@@ -40,7 +40,7 @@ router.post('/signin', [
           role: requiredUser.role
         }
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME })
-        return res.json({ success: token })
+        return res.json({ success: token, role: requiredUser.role })
       }
       return res.status(400).json({ error: 'Please enter valid credentials' })
     }
@@ -173,7 +173,7 @@ router.post('/signup', [
             role: user.role
           }
           const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME })
-          return res.json({ success: token, message: 'Account created successfully!' })
+          return res.json({ success: token, message: 'Account created successfully!', role: user.role })
         }
         return res.status(400).json({ error: 'Error occurred while creating your account.' })
       }

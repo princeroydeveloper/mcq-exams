@@ -57,7 +57,10 @@ function AuthProvider({ children }) {
         return toast.error(res.error)
       } else if (stats === 200 && res.success) {
         localStorage.setItem(LOCAL_STORAGE_AUTH_TOKEN_KEY, res.success)
-        return window.location.href = '/'
+        if (res.role === 'teacher') {
+          return window.location.href = '/'
+        }
+        return window.location.href = '/join'
       } else if (stats === 500) {
         setBtnDisabled(false)
         return toast.error(res.error)
@@ -101,7 +104,10 @@ function AuthProvider({ children }) {
         toast.success(res.message)
         toast.success('Redirecting to dashboard in a moment...')
         return setTimeout(() => {
-          window.location.href = '/'
+          if (res.role === 'teacher') {
+            return window.location.href = '/'
+          }
+          return window.location.href = '/join'
         }, 2000)
       } else if (stats === 500) {
         setBtnDisabled(false)

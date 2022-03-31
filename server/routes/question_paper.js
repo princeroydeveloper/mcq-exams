@@ -83,9 +83,13 @@ router.post('/get_total_no_questions', validateTeacher, [
       return res.status(400).json({ errors: errors.array() })
     }
     // Proceed further
-    const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1 })
-    if (all_questions_ids) {
-      return res.json({ total: all_questions_ids })
+    const requiredQP = await QuestionPaper.findOne({ uid: ObjectId(req.user.uid), _id: ObjectId(req.body.qp_id) })
+    if (requiredQP) {
+      const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1, marks: 1 })
+      if (all_questions_ids) {
+        return res.json({ total: all_questions_ids, paper_id: requiredQP.paper_id })
+      }
+      return res.status(400).json({ error: 'Cannot find question paper.' })
     }
     return res.status(400).json({ error: 'Cannot find question paper.' })
   } catch (error) {

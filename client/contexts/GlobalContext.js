@@ -13,6 +13,7 @@ function GlobalProvider({ children }) {
   const [btnDisabled, setBtnDisabled] = useState(false)
   const progressOverlayRef = useRef()
   const [progress, setProgress] = useState({})
+  const [appPath, setAppPath] = useState('')
 
   useEffect(() => {
     setProgress({
@@ -23,6 +24,7 @@ function GlobalProvider({ children }) {
         return $(progressOverlayRef.current).fadeOut()
       }
     })
+    setAppPath(window.location.origin)
     setLoading(false)
   }, [])
 
@@ -30,7 +32,8 @@ function GlobalProvider({ children }) {
     API_DOMAIN,
     btnDisabled, setBtnDisabled,
     progressOverlayRef,
-    progress
+    progress,
+    appPath
   }
 
   return (

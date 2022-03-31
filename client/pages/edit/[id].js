@@ -5,11 +5,17 @@ import { Card, CardContent, Container, Fab, Grid, TextField, SpeedDialIcon, Butt
 import { useQuestion } from "../../contexts/QuestionContext"
 import { useGlobal } from "../../contexts/GlobalContext"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { useAuth } from "../../contexts/AuthContext"
+import { ContentCopy } from '@mui/icons-material'
+import ultralightCopy from 'copy-to-clipboard-ultralight'
+import { toast } from "react-toastify"
 
 const EditPaper = () => {
-  const { state, dispatch, save, getPaper, totalNo, get } = useQuestion()
-  const { btnDisabled } = useGlobal()
+  const { state, dispatch, saveQuestion, getPaper, totalNo, getQuestion, deleteQuestion, paperId } = useQuestion()
+  const { currentUser } = useAuth()
+  const { btnDisabled, appPath } = useGlobal()
+  const [fm, setFm] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
@@ -20,10 +26,21 @@ const EditPaper = () => {
   }, [router.query])
 
   useEffect(() => {
-    if (state.qp_id !== '') {
+    if (state.qp_id !== '' && Object.keys(currentUser).length > 0) {
       getPaper()
     }
   }, [state.qp_id])
+
+  useEffect(() => {
+    async function perform() {
+      let new_fm = 0
+      await totalNo.forEach(item => {
+        new_fm = new_fm + item.marks
+      })
+      setFm(new_fm)
+    }
+    perform()
+  }, [totalNo])
 
   return (
     <>
@@ -36,11 +53,11 @@ const EditPaper = () => {
           <Grid container spacing={2} className='my-5'>
             <Grid item xs={8}>
               <TextField
-                variant="standard"
-                label='Your question'
+                variant="outlined"
+                label='QUESTION'
                 autoComplete="off"
                 margin="normal"
-                InputLabelProps={{ style: { fontSize: '20px' } }}
+                InputLabelProps={{ style: { fontSize: '20px', letterSpacing: 7.5 } }}
                 InputProps={{ style: { fontSize: '30px' } }}
                 fullWidth
                 multiline
@@ -97,19 +114,55 @@ const EditPaper = () => {
                 <CardContent>
                   <h5>Questions</h5>
                   <div className='row'>
-                    {totalNo.map((item, index) => {
-                      return (
-                        <Fab size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' key={item._id} onClick={() => {
-                          get(item._id)
-                        }} color={state.question_id === item._id ? 'primary' : 'inherit'}>{index + 1}</Fab>
-                      )
-                    })}
-                    <Fab size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' color='secondary' onClick={() => dispatch({ type: 'discard' })} disabled={btnDisabled}>
-                      <SpeedDialIcon />
-                    </Fab>
+                    {totalNo.length > 0 ?
+                      <>
+                        {totalNo.map((item, index) => {
+                          return (
+                            <Fab size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' key={item._id} onClick={() => {
+                              if (state.question_id === item._id) return
+                              return getQuestion(item._id)
+                            }} color={state.question_id === item._id ? 'primary' : 'inherit'}>{index + 1}</Fab>
+                          )
+                        })}
+                        <Fab size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' color='secondary' onClick={() => dispatch({ type: 'discard' })} disabled={btnDisabled}>
+                          <SpeedDialIcon />
+                        </Fab>
+                      </>
+                      :
+                      <>
+                        <h6 className='text-center text-muted mt-3'>No questions to show... Add your first question...</h6>
+                      </>
+                    }
                   </div>
                 </CardContent>
               </Card>
+              {totalNo.length > 0 &&
+                <Card className='p-2 mt-4'>
+                  <CardContent>
+                    <h5>Other information</h5>
+                    <h6 className='text-muted mt-3'>Full Marks = {fm}</h6>
+                    <h6 className='text-muted mt-3'>Paper ID: {paperId}
+                      <Button size='small' variant='text' className='mx-3' onClick={() => {
+                        if (ultralightCopy(paperId)) {
+                          return toast.success('Question paper Id has been successfully copied to clipboard!')
+                        }
+                      }}>
+                        <ContentCopy fontSize='20' />&nbsp;Copy
+                      </Button>
+                    </h6>
+                    <h6 className='mt-3'><span className="text-muted">Direct link for students to attempt the exam:</span> <span className='text-primary'>{appPath}/join/{paperId}</span><br />
+                      <Button size='small' variant='text' className='mx-3' onClick={() => {
+                        if (ultralightCopy(`${appPath}/join/${paperId}`)) {
+                          return toast.success('Exam link has been successfully copied to clipboard!')
+                        }
+                      }}>
+                        <ContentCopy fontSize='20' />&nbsp;Copy
+                      </Button>
+                    </h6>
+                    <small className='text-muted'>Notice: The student must be signin to attempt the exam</small>
+                  </CardContent>
+                </Card>
+              }
             </Grid>
           </Grid>
           <Grid container spacing={4} style={{ maxWidth: '40%' }}>
@@ -131,11 +184,15 @@ const EditPaper = () => {
               <TextField type='number' variant='standard' label='Marks' size='small' autoComplete='off'
                 value={state.marks}
                 onChange={e => dispatch({ type: 'update_marks', payload: { value: e.target.value } })}
+                helperText='Optional'
               />
             </Grid>
           </Grid>
-          <br /><br /><br />
-          <Button variant='contained' disabled={btnDisabled} onClick={save}>Save</Button>
+          <br /><br />
+          <Button variant='contained' disabled={btnDisabled} onClick={saveQuestion}>Save</Button>
+          {state.question_id &&
+            <Button variant='contained' disabled={btnDisabled} onClick={deleteQuestion} className='mx-4' color='error'>Delete</Button>
+          }
         </Container>
       </PrivateRouteForTeachers>
     </>

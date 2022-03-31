@@ -633,6 +633,11 @@
   dependencies:
     "safe-buffer" "~5.1.1"
 
+"copy-to-clipboard-ultralight@^1.0.14":
+  "integrity" "sha512-/ZlRHWZulidpt8B7sxYQOqQ4s/XnxE9Ikua3xUz0k5UZOSNJVU+gB9mQO5seowwydIqNujhXASX0rw72dNRjDA=="
+  "resolved" "https://registry.npmjs.org/copy-to-clipboard-ultralight/-/copy-to-clipboard-ultralight-1.0.14.tgz"
+  "version" "1.0.14"
+
 "core-js-pure@^3.20.2":
   "integrity" "sha512-12VZfFIu+wyVbBebyHmRTuEE/tZrB4tJToWcwAMcsp3h4+sHR+fMJWbKpYiCRWlhFBq+KNyO8rIV9rTkeVmznQ=="
   "resolved" "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.21.1.tgz"

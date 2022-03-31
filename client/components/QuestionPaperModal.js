@@ -4,15 +4,13 @@ import { useGlobal } from "../contexts/GlobalContext"
 import { useEffect, useState } from "react"
 
 export const NewModal = () => {
-  const { newModal, setNewModal, create, getAll } = useQuestionPaper()
+  const { newModal, setNewModal, create } = useQuestionPaper()
   const { btnDisabled } = useGlobal()
   const [name, setName] = useState('')
 
   useEffect(() => {
     if (!newModal) {
       setName('')
-      getAll()
-
     }
   }, [newModal])
 
@@ -42,14 +40,8 @@ export const NewModal = () => {
 }
 
 export const DeleteModal = () => {
-  const { delModal, setDelModal, getAll, paper_data, deleteQp } = useQuestionPaper()
+  const { delModal, setDelModal, paper_data, deleteQp } = useQuestionPaper()
   const { btnDisabled } = useGlobal()
-
-  useEffect(() => {
-    if (!delModal) {
-      getAll()
-    }
-  }, [delModal])
 
   return (
     <div>

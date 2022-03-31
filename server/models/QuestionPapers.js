@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { nanoid } = require('nanoid')
 
 const QuestionPaperSchema = new mongoose.Schema({
   name: {
@@ -18,6 +19,12 @@ const QuestionPaperSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true
+  },
+  paper_id: {
+    type: String,
+    required: true,
+    unique: true,
+    default: nanoid(10)
   }
 }, { collection: 'question-papers' })
 
