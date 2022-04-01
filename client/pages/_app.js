@@ -8,6 +8,7 @@ import { createTheme, ThemeProvider } from '@mui/material'
 import ProgressOverlay from '../components/ProgressOverlay'
 import QuestionPaperProvider from '../contexts/QuestionPaperContext'
 import QuestionProvider from '../contexts/QuestionContext'
+import ExamProvider from '../contexts/ExamContext'
 
 function MCQExams({ Component, pageProps }) {
   const customTheme = createTheme({
@@ -31,10 +32,12 @@ function MCQExams({ Component, pageProps }) {
         <AuthProvider>
           <QuestionPaperProvider>
             <QuestionProvider>
-              <ThemeProvider theme={customTheme}>
-                <ProgressOverlay />
-                <Component {...pageProps} />
-              </ThemeProvider>
+              <ExamProvider>
+                <ThemeProvider theme={customTheme}>
+                  <ProgressOverlay />
+                  <Component {...pageProps} />
+                </ThemeProvider>
+              </ExamProvider>
             </QuestionProvider>
           </QuestionPaperProvider>
         </AuthProvider>

@@ -159,7 +159,7 @@ const EditPaper = () => {
                         <ContentCopy fontSize='20' />&nbsp;Copy
                       </Button>
                     </h6>
-                    <small className='text-muted'>Notice: The student must be signin to attempt the exam</small>
+                    <small className='text-muted'>Notice: The student must signin to attempt the exam</small>
                   </CardContent>
                 </Card>
               }
