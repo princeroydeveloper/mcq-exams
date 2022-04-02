@@ -28,7 +28,7 @@ const TeachersHome = () => {
         <title>Teacher Dashboard - MCQ Exams</title>
       </Head>
       <PrivateRouteForTeachers>
-        <BrandHeader title='Teacher Dashboard' />
+        <BrandHeader title='Teacher Dashboard' options={true} />
         <NewModal />
         <DeleteModal />
         <Container className='my-5'>

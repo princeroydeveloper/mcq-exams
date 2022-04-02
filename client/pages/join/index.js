@@ -16,7 +16,7 @@ const StudentsHome = () => {
         <title>Student Dashboard - MCQ Exams</title>
       </Head>
       <PrivateRouteForStudents>
-        <BrandHeader title='Student Dashboard' />
+        <BrandHeader title='Student Dashboard' options={true} />
         <JoinModal />
         <Container className='my-5'>
           <Tooltip title='Refresh'>

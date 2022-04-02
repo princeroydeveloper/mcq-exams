@@ -38,3 +38,32 @@ export const JoinModal = () => {
     </div>
   )
 }
+
+export const ConfirmJoinModal = ({ paper_id }) => {
+  const { confirmModal, join } = useExam()
+  const { btnDisabled } = useGlobal()
+
+  return (
+    <div>
+      <Dialog
+        open={confirmModal}
+        maxWidth='xs'
+        fullWidth
+        TransitionComponent={Grow}
+      >
+        <DialogTitle>
+          Confirm Joining Exam
+        </DialogTitle>
+        <DialogContent>
+          <h6 className='text-muted'>By clicking "Confirm & Join", your exam timer will start (as per your teacher's dedicated time for this paper) and will autosubmit after the time ends.</h6>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => window.location.href = '/join'} disabled={btnDisabled}>Cancel</Button>
+          <Button disabled={btnDisabled} onClick={() => {
+            join(paper_id)
+          }}>Confirm & Join</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}

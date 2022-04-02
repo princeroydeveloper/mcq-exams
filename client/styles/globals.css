@@ -48,3 +48,12 @@ a {
 ::selection {
   background-color: #35ffe3;
 }
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f3f3f3;
+  border-top: 1px solid #c4c5c6;
+}

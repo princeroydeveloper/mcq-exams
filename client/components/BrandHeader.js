@@ -9,7 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import TakeMe from './TakeMe';
 import { useGlobal } from '../contexts/GlobalContext';
 
-export default function BrandHeader({ title }) {
+export default function BrandHeader({ title, options }) {
   const { currentUser } = useAuth()
   const { progress } = useGlobal()
 
@@ -21,15 +21,19 @@ export default function BrandHeader({ title }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {title} - MCQ Exams
           </Typography>
-          <TakeMe fullReload={true} path='/profile'>
-            <Button color="inherit" className='mx-2'>Profile</Button>
-          </TakeMe>
-          <Button color="inherit" className='mx-2' onClick={() => {
-            progress.show()
-            return setTimeout(() => {
-              currentUser.signOut()
-            }, 800)
-          }}>SignOut</Button>
+          {options &&
+            <>
+              <TakeMe fullReload={true} path='/profile'>
+                <Button color="inherit" className='mx-2'>Profile</Button>
+              </TakeMe>
+              <Button color="inherit" className='mx-2' onClick={() => {
+                progress.show()
+                return setTimeout(() => {
+                  currentUser.signOut()
+                }, 800)
+              }}>SignOut</Button>
+            </>
+          }
         </Toolbar>
       </AppBar>
     </Box>
