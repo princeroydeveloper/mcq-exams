@@ -1,7 +1,7 @@
 import Head from "next/head"
 import BrandHeader from "../../components/BrandHeader"
 import PrivateRouteForTeachers from "../../components/PrivateRouteForTeachers"
-import { Card, CardContent, Container, Fab, Grid, TextField, SpeedDialIcon, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { Card, CardContent, Container, Fab, Grid, TextField, SpeedDialIcon, Button, FormControl, InputLabel, Select, MenuItem, InputAdornment, Input, FilledInput } from '@mui/material'
 import { useQuestion } from "../../contexts/QuestionContext"
 import { useGlobal } from "../../contexts/GlobalContext"
 import { useRouter } from "next/router"
@@ -48,7 +48,7 @@ const EditPaper = () => {
         <title>Edit Question Paper - MCQ Exams</title>
       </Head>
       <PrivateRouteForTeachers>
-        <BrandHeader title='Edit question paper' />
+        <BrandHeader title='Edit question paper' options={true} />
         <Container className='my-5'>
           <Grid container spacing={2} className='my-5'>
             <Grid item xs={8}>
@@ -108,6 +108,34 @@ const EditPaper = () => {
                 value={state.opt_d}
                 onChange={e => dispatch({ type: 'update_opt_d', payload: { value: e.target.value } })}
               />
+              <Grid container spacing={4} style={{ maxWidth: '40%' }} className='mt-4'>
+                <Grid item xs={8}>
+                  <FormControl variant='standard' size='small' fullWidth>
+                    <InputLabel id='correct__option__select'>Correct Option</InputLabel>
+                    <Select labelId='correct__option__select' label='Correct Option'
+                      value={state.correct_opt}
+                      onChange={e => dispatch({ type: 'update_correct_opt', payload: { value: e.target.value } })}
+                    >
+                      <MenuItem value='opt_a'>Option A</MenuItem>
+                      <MenuItem value='opt_b'>Option B</MenuItem>
+                      <MenuItem value='opt_c'>Option C</MenuItem>
+                      <MenuItem value='opt_d'>Option D</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField type='number' variant='standard' label='Marks' size='small' autoComplete='off'
+                    value={state.marks}
+                    onChange={e => dispatch({ type: 'update_marks', payload: { value: e.target.value } })}
+                    helperText='Optional'
+                  />
+                </Grid>
+              </Grid>
+              <br /><br />
+              <Button variant='contained' disabled={btnDisabled} onClick={saveQuestion}>Save</Button>
+              {state.question_id &&
+                <Button variant='contained' disabled={btnDisabled} onClick={deleteQuestion} className='mx-4' color='error'>Delete</Button>
+              }
             </Grid>
             <Grid item xs={4}>
               <Card className='p-2'>
@@ -159,40 +187,22 @@ const EditPaper = () => {
                         <ContentCopy fontSize='20' />&nbsp;Copy
                       </Button>
                     </h6>
+                    <FormControl variant='filled' size='small' className='mt-3' fullWidth>
+                      <InputLabel>Exam Duration</InputLabel>
+                      <FilledInput
+                        type='number'
+                        onBlur={() => {
+                          console.log('changeed')
+                        }}
+                        endAdornment={<InputAdornment position='end'>minutes</InputAdornment>}
+                      />
+                    </FormControl><br /><br />
                     <small className='text-muted'>Notice: The student must signin to attempt the exam</small>
                   </CardContent>
                 </Card>
               }
             </Grid>
           </Grid>
-          <Grid container spacing={4} style={{ maxWidth: '40%' }}>
-            <Grid item xs={8}>
-              <FormControl variant='standard' size='small' fullWidth>
-                <InputLabel id='correct__option__select'>Correct Option</InputLabel>
-                <Select labelId='correct__option__select' label='Correct Option'
-                  value={state.correct_opt}
-                  onChange={e => dispatch({ type: 'update_correct_opt', payload: { value: e.target.value } })}
-                >
-                  <MenuItem value='opt_a'>Option A</MenuItem>
-                  <MenuItem value='opt_b'>Option B</MenuItem>
-                  <MenuItem value='opt_c'>Option C</MenuItem>
-                  <MenuItem value='opt_d'>Option D</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField type='number' variant='standard' label='Marks' size='small' autoComplete='off'
-                value={state.marks}
-                onChange={e => dispatch({ type: 'update_marks', payload: { value: e.target.value } })}
-                helperText='Optional'
-              />
-            </Grid>
-          </Grid>
-          <br /><br />
-          <Button variant='contained' disabled={btnDisabled} onClick={saveQuestion}>Save</Button>
-          {state.question_id &&
-            <Button variant='contained' disabled={btnDisabled} onClick={deleteQuestion} className='mx-4' color='error'>Delete</Button>
-          }
         </Container>
       </PrivateRouteForTeachers>
     </>

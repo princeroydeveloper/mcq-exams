@@ -25,7 +25,12 @@ const QuestionPaperSchema = new mongoose.Schema({
     required: true,
     unique: true,
     default: nanoid(10)
-  }
+  },
+  duration: {
+    type: Number,
+    required: true,
+    default: 0
+  },
 }, { collection: 'question-papers' })
 
 const model = mongoose.model('question-papers', QuestionPaperSchema)
