@@ -6,6 +6,7 @@ import BrandHeader from "../../components/BrandHeader"
 import { ConfirmJoinModal, SubmitModal } from "../../components/ExamModal"
 import PrivateRouteForStudents from "../../components/PrivateRouteForStudents"
 import { useExam } from "../../contexts/ExamContext"
+import { useTime, useTimer } from 'react-timer-hook'
 
 const Exam = () => {
   const { examQuestions, answerState, answerDispatch, setConfirmModal, examDuration, submit, setSubmitModal } = useExam()
@@ -14,6 +15,9 @@ const Exam = () => {
   const [pId, setPId] = useState('')
   const router = useRouter()
   const { paper_id } = router.query
+  const time = new Date()
+  time.setSeconds(time.getSeconds() + 600)
+  const examTimer = useTimer({ expiryTimestamp: time, onExpire: () => submit(pId), autoStart: false })
 
   useEffect(() => {
     return setConfirmModal(true)
@@ -38,6 +42,14 @@ const Exam = () => {
     return setTickedOpt('')
   }, [answerState, currentQuestion])
 
+  useEffect(() => {
+    if (examDuration !== 0) {
+      const newTime = new Date()
+      newTime.setSeconds(newTime.getSeconds() + (examDuration * 60))
+      examTimer.restart(newTime)
+    }
+  }, [examDuration])
+
   function handleOptionChange(e) {
     return answerDispatch({ type: 'set_answer', payload: { qId: currentQuestion._id, opt: e.target.value } })
   }
@@ -48,7 +60,7 @@ const Exam = () => {
         <title>Live Exam - MCQ Exams</title>
       </Head>
       <PrivateRouteForStudents>
-        <BrandHeader title='Exam' options={false} examDuration={examDuration} submitExam={() => submit(pId)} timer={true} />
+        <BrandHeader title='Exam' options={false} examTimer={examTimer} />
         <ConfirmJoinModal paper_id={pId} />
         <SubmitModal totalQuestions={examQuestions.length} questionsAnswered={answerState.length} submitFunction={() => submit(pId)} />
         {examQuestions.length > 0 ?

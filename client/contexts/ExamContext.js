@@ -32,7 +32,7 @@ function ExamProvider({ children }) {
   const [answerState, answerDispatch] = useReducer(answerReducer, [])
   const [examDuration, setExamDuration] = useState(0)
   const [attemptedExams, setAttemptedExams] = useState([])
-  const [scoreData, setScoreData] = useState([])
+  const [scoreData, setScoreData] = useState({})
 
   async function check(code) {
     try {

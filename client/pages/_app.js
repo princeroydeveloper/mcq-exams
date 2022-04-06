@@ -9,6 +9,7 @@ import ProgressOverlay from '../components/ProgressOverlay'
 import QuestionPaperProvider from '../contexts/QuestionPaperContext'
 import QuestionProvider from '../contexts/QuestionContext'
 import ExamProvider from '../contexts/ExamContext'
+import ResponsesProvider from '../contexts/ResponsesContext'
 
 function MCQExams({ Component, pageProps }) {
   const customTheme = createTheme({
@@ -33,10 +34,12 @@ function MCQExams({ Component, pageProps }) {
           <QuestionPaperProvider>
             <QuestionProvider>
               <ExamProvider>
-                <ThemeProvider theme={customTheme}>
-                  <ProgressOverlay />
-                  <Component {...pageProps} />
-                </ThemeProvider>
+                <ResponsesProvider>
+                  <ThemeProvider theme={customTheme}>
+                    <ProgressOverlay />
+                    <Component {...pageProps} />
+                  </ThemeProvider>
+                </ResponsesProvider>
               </ExamProvider>
             </QuestionProvider>
           </QuestionPaperProvider>

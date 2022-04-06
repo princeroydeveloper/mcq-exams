@@ -54,7 +54,9 @@ const TeachersHome = () => {
                         <Button variant='outlined' size='small' onClick={() => {
                           return window.open(`/edit/${qp._id}`)
                         }}>Edit</Button>&nbsp;&nbsp;
-                        <Button variant='outlined' size='small' color='secondary'>Rename</Button>&nbsp;&nbsp;
+                        <Button variant='outlined' size='small' color='secondary' onClick={() => {
+                          return window.open(`/responses/${qp._id}`)
+                        }}>Responses</Button>&nbsp;&nbsp;
                         <Button variant='outlined' size='small' color='error' onClick={() => {
                           setPaper_data(qp)
                           return setDelModal(true)

@@ -24,6 +24,7 @@ app.use('/auth', require('./routes/auth'))
 app.use('/question_paper', require('./routes/question_paper'))
 app.use('/question', require('./routes/question'))
 app.use('/exam', require('./routes/exam'))
+app.use('/responses', require('./routes/responses'))
 
 app.listen(PORT, () => {
   console.log(`Server up at ${PORT}`)
