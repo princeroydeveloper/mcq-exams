@@ -29,8 +29,8 @@ const QuestionPaperSchema = new mongoose.Schema({
   duration: {
     type: Number,
     required: true,
-    default: 0
-  },
+    default: 60
+  }
 }, { collection: 'question-papers' })
 
 const model = mongoose.model('question-papers', QuestionPaperSchema)

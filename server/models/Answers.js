@@ -26,6 +26,9 @@ const AnswerSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true
+  },
+  submitTimestamp: {
+    type: Date
   }
 }, { collection: 'answers' })
 

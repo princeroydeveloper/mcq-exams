@@ -14,7 +14,8 @@ router.post('/save', validateTeacher, [
   body('opt_c', 'Please enter option C').trim().isLength({ min: 1 }),
   body('opt_d', 'Please enter option D').trim().isLength({ min: 1 }),
   body('correct_opt', 'Please choose correct option').trim().isLength({ min: 1 }),
-  body('qp_id', 'Request processing error...').trim().isLength({ min: 1 })
+  body('qp_id', 'Request processing error...').trim().isLength({ min: 1 }),
+  body('marks', 'Please enter a suitable mark for this question').isInt({ min: 1 })
 ], async (req, res) => {
   try {
     // Finds error in validation and return bad request

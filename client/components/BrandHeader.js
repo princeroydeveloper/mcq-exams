@@ -8,10 +8,27 @@ import Flaky from '@mui/icons-material/Flaky'
 import { useAuth } from '../contexts/AuthContext';
 import TakeMe from './TakeMe';
 import { useGlobal } from '../contexts/GlobalContext';
+import { useTimer } from 'react-timer-hook'
 
-export default function BrandHeader({ title, options }) {
+export default function BrandHeader({ title, options, examDuration, submitExam, timer }) {
   const { currentUser } = useAuth()
   const { progress } = useGlobal()
+  const time = new Date()
+  time.setSeconds(time.getSeconds() + 600)
+  const {
+    seconds,
+    minutes,
+    hours,
+    restart
+  } = useTimer({ expiryTimestamp: time, onExpire: () => submitExam() })
+
+  React.useEffect(() => {
+    if (examDuration !== 0) {
+      const newTime = new Date()
+      newTime.setSeconds(newTime.getSeconds() + (examDuration * 60))
+      restart(newTime)
+    }
+  }, [examDuration])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -33,6 +50,9 @@ export default function BrandHeader({ title, options }) {
                 }, 800)
               }}>SignOut</Button>
             </>
+          }
+          {(examDuration !== 0 && timer === true) &&
+            <div className='exam__timer'>{hours} : {minutes} : {seconds}</div>
           }
         </Toolbar>
       </AppBar>

@@ -55,13 +55,40 @@ export const ConfirmJoinModal = ({ paper_id }) => {
           Confirm Joining Exam
         </DialogTitle>
         <DialogContent>
-          <h6 className='text-muted'>By clicking "Confirm & Join", your exam timer will start (as per your teacher's dedicated time for this paper) and will autosubmit after the time ends.</h6>
+          <h6 className='text-muted'>By clicking "Confirm & Join", your exam timer will start (as per the duration assigned by your teacher) and will autosubmit after the time ends.</h6>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => window.location.href = '/join'} disabled={btnDisabled}>Cancel</Button>
           <Button disabled={btnDisabled} onClick={() => {
             join(paper_id)
           }}>Confirm & Join</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
+}
+
+export const SubmitModal = ({ submitFunction, questionsAnswered, totalQuestions }) => {
+  const { btnDisabled } = useGlobal()
+  const { submitModal, setSubmitModal } = useExam()
+
+  return (
+    <div>
+      <Dialog
+        open={submitModal}
+        maxWidth='xs'
+        fullWidth
+        TransitionComponent={Grow}
+      >
+        <DialogTitle>
+          Confirm submitting answers
+        </DialogTitle>
+        <DialogContent>
+          <h6 className='text-muted'>You have answered {questionsAnswered} out of {totalQuestions} questions. Are you sure to submit?</h6>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSubmitModal(false)} disabled={btnDisabled}>Cancel</Button>
+          <Button disabled={btnDisabled} onClick={submitFunction}>Submit</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -100,6 +100,7 @@ function QuestionProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [totalNo, setTotalNo] = useState([])
   const [paperId, setPaperId] = useState('')
+  const [paperDuration, setPaperDuration] = useState(0)
 
   async function saveQuestion() {
     try {
@@ -226,7 +227,8 @@ function QuestionProvider({ children }) {
       } else if (stats === 200 && res.total) {
         progress.hide()
         setTotalNo(res.total)
-        return setPaperId(res.paper_id)
+        setPaperId(res.paper_id)
+        return setPaperDuration(res.duration)
       } else if (stats === 500) {
         progress.hide()
         toast.error(res.error)
@@ -293,10 +295,53 @@ function QuestionProvider({ children }) {
     }
   }
 
+  async function setDuration() {
+    try {
+      progress.show()
+      const req = await fetch(`${API_DOMAIN}/question_paper/set_duration`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+        },
+        body: JSON.stringify({ qp_id: state.qp_id, duration: paperDuration })
+      })
+      const stats = req.status
+      const res = await req.json()
+      if (stats === 400) {
+        if (res.errors) {
+          progress.hide()
+          return toast.error(res.errors[0].msg)
+        } else if (res.error) {
+          progress.hide()
+          return toast.error(res.error)
+        }
+        progress.hide()
+        return toast.error('An unexpected error occurred...')
+      } else if (stats === 401 && res.error) {
+        return currentUser.signOut()
+      } else if (stats === 200 && res.success) {
+        progress.hide()
+        setPaperDuration(res.db_value)
+        return toast.success(res.success)
+      } else if (stats === 500) {
+        progress.hide()
+        return toast.error(res.error)
+      } else {
+        progress.hide()
+        return toast.error('An unexpected error occurred...')
+      }
+    } catch (error) {
+      progress.hide()
+      console.error(error)
+      return toast.error('An unexpected error occurred')
+    }
+  }
+
   const values = {
     state, dispatch,
-    saveQuestion, getPaper, getQuestion, deleteQuestion,
-    totalNo, paperId
+    saveQuestion, getPaper, getQuestion, deleteQuestion, setDuration,
+    totalNo, paperId, paperDuration, setPaperDuration
   }
 
   return (

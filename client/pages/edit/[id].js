@@ -12,7 +12,7 @@ import ultralightCopy from 'copy-to-clipboard-ultralight'
 import { toast } from "react-toastify"
 
 const EditPaper = () => {
-  const { state, dispatch, saveQuestion, getPaper, totalNo, getQuestion, deleteQuestion, paperId } = useQuestion()
+  const { state, dispatch, saveQuestion, getPaper, totalNo, getQuestion, deleteQuestion, paperId, paperDuration, setDuration, setPaperDuration } = useQuestion()
   const { currentUser } = useAuth()
   const { btnDisabled, appPath } = useGlobal()
   const [fm, setFm] = useState(0)
@@ -127,7 +127,6 @@ const EditPaper = () => {
                   <TextField type='number' variant='standard' label='Marks' size='small' autoComplete='off'
                     value={state.marks}
                     onChange={e => dispatch({ type: 'update_marks', payload: { value: e.target.value } })}
-                    helperText='Optional'
                   />
                 </Grid>
               </Grid>
@@ -191,9 +190,9 @@ const EditPaper = () => {
                       <InputLabel>Exam Duration</InputLabel>
                       <FilledInput
                         type='number'
-                        onBlur={() => {
-                          console.log('changeed')
-                        }}
+                        onBlur={setDuration}
+                        onChange={e => setPaperDuration(e.target.value)}
+                        value={paperDuration}
                         endAdornment={<InputAdornment position='end'>minutes</InputAdornment>}
                       />
                     </FormControl><br /><br />

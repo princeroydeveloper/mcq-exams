@@ -3,12 +3,12 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import BrandHeader from "../../components/BrandHeader"
-import { ConfirmJoinModal } from "../../components/ExamModal"
+import { ConfirmJoinModal, SubmitModal } from "../../components/ExamModal"
 import PrivateRouteForStudents from "../../components/PrivateRouteForStudents"
 import { useExam } from "../../contexts/ExamContext"
 
 const Exam = () => {
-  const { examQuestions, answerState, answerDispatch, setConfirmModal } = useExam()
+  const { examQuestions, answerState, answerDispatch, setConfirmModal, examDuration, submit, setSubmitModal } = useExam()
   const [currentQuestion, setCurrentQuestion] = useState('')
   const [tickedOpt, setTickedOpt] = useState('')
   const [pId, setPId] = useState('')
@@ -48,7 +48,9 @@ const Exam = () => {
         <title>Live Exam - MCQ Exams</title>
       </Head>
       <PrivateRouteForStudents>
-        <BrandHeader title='Exam' options={false} />
+        <BrandHeader title='Exam' options={false} examDuration={examDuration} submitExam={() => submit(pId)} timer={true} />
+        <ConfirmJoinModal paper_id={pId} />
+        <SubmitModal totalQuestions={examQuestions.length} questionsAnswered={answerState.length} submitFunction={() => submit(pId)} />
         {examQuestions.length > 0 ?
           <Container className='my-5'>
             <Grid container>
@@ -104,12 +106,12 @@ const Exam = () => {
                     return setCurrentQuestion({ ...examQuestions[i], index: i })
                   }}>Next Question</Button>
                 }
+                <Button onClick={() => setSubmitModal(true)} className='float-end' variant="contained" color="success">Submit Answers</Button>
               </Container>
             </div>
           </Container>
           :
           <>
-            <ConfirmJoinModal paper_id={pId} />
             <h1 className='my-5 text-muted text-center'>Waiting for confirmation ...</h1>
           </>
         }

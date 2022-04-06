@@ -87,11 +87,37 @@ router.post('/get_total_no_questions', validateTeacher, [
     if (requiredQP) {
       const all_questions_ids = await Question.find({ uid: ObjectId(req.user.uid), qp_id: ObjectId(req.body.qp_id) }).select({ _id: 1, marks: 1 })
       if (all_questions_ids) {
-        return res.json({ total: all_questions_ids, paper_id: requiredQP.paper_id })
+        return res.json({ total: all_questions_ids, paper_id: requiredQP.paper_id, duration: requiredQP.duration })
       }
       return res.status(400).json({ error: 'Cannot find question paper.' })
     }
     return res.status(400).json({ error: 'Cannot find question paper.' })
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
+router.post('/set_duration', validateTeacher, [
+  body('qp_id', 'Request processing error...').isLength({ min: 1 }),
+  body('duration', 'Duration must be of 5 minutes (minimum)').isInt({ min: 5 })
+], async (req, res) => {
+  try {
+    // Finds error in validation and return bad request
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // Proceed further
+    let d = 0
+    if (!isNaN(parseInt(req.body.duration))) {
+      d = parseInt(req.body.duration)
+    }
+    const updatedPaper = await QuestionPaper.findOneAndUpdate({ uid: ObjectId(req.user.uid), _id: ObjectId(req.body.qp_id) }, { duration: d }, { new: true })
+    if (updatedPaper) {
+      return res.json({ success: 'Exam duration saved!', db_value: updatedPaper.duration })
+    }
+    return res.status(400).json({ error: 'Error occurred while saving exam duration.' })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ error: 'Internal Server Error' })

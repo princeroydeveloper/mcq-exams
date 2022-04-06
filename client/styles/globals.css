@@ -71,3 +71,13 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+.exam__timer {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.exam__timer::before {
+  content: "Your remaining time: ";
+}
