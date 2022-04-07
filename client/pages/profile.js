@@ -3,7 +3,7 @@ import { useState } from "react"
 import PrivateRoute from "../components/PrivateRoute"
 import { useAuth } from "../contexts/AuthContext"
 import { useGlobal } from "../contexts/GlobalContext"
-import { Button, Container, Slide, Card, CardContent, TextField } from '@mui/material'
+import { Button, Container, Slide, Card, CardContent, TextField, Grid } from '@mui/material'
 import { Flaky } from '@mui/icons-material'
 import TakeMe from "../components/TakeMe"
 
@@ -21,12 +21,9 @@ const Profile = () => {
       </Head>
       <PrivateRoute>
         <Slide direction='down' in={true}>
-          <Container className='my-5' style={{ maxWidth: '400px' }}>
-            <Card className='p-4'>
-              <CardContent component='form' autoComplete='off' onSubmit={e => {
-                e.preventDefault()
-                signIn(email, password)
-              }}>
+          <Container className='my-5' style={{ maxWidth: '450px' }}>
+            <Card className='p-4' variant='outlined'>
+              <CardContent component='form' autoComplete='off'>
                 <h3 className='text-center mb-2'>Profile - MCQ Exams</h3>
                 <center>
                   <small className='text-muted text-center'>The best exam environment for students & teachers</small>
@@ -37,10 +34,10 @@ const Profile = () => {
                 <p className='text-center'>Name: <strong>{currentUser.fname} {currentUser.lname}</strong></p>
                 <p className='text-center'>Email: <strong>{currentUser.email}</strong></p>
                 <p className='text-center mb-5'>Role: <strong>{currentUser.role}</strong></p>
-                <TextField variant='outlined' type='password' fullWidth label='Old Password' className='mb-4' value={oldPass} onChange={e => setOldPass(e.target.value)} />
-                <TextField variant='outlined' type='password' fullWidth label='New Password' className='mb-4' value={newPass} onChange={e => setNewPass(e.target.value)} />
-                <TextField variant='outlined' type='password' fullWidth label='Confirm New Password' className='mb-4' value={cNewPass} onChange={e => setCNewPass(e.target.value)} />
-                <Button variant='contained' disabled={btnDisabled} onClick={() => currentUser.changePassword(oldPass, newPass, cNewPass)}>Change Password</Button>
+                <TextField size='small' fullWidth variant='outlined' type='password' label='Old Password' className='mb-4' value={oldPass} onChange={e => setOldPass(e.target.value)} />
+                <TextField size='small' fullWidth variant='outlined' type='password' label='New Password' className='mb-4' value={newPass} onChange={e => setNewPass(e.target.value)} />
+                <TextField size='small' fullWidth variant='outlined' type='password' label='Confirm New Password' className='mb-4' value={cNewPass} onChange={e => setCNewPass(e.target.value)} />
+                <Button size='small' sx={{ boxShadow: 0 }} variant='contained' disabled={btnDisabled} onClick={() => currentUser.changePassword(oldPass, newPass, cNewPass)}>Change Password</Button>
                 <br /><br /><br />
                 <TakeMe path={currentUser.role === 'teacher' ? '/' : '/join'} fullReload={true}>
                   <Button className='float-start' variant='text' color='secondary' disabled={btnDisabled}>Back</Button>

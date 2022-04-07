@@ -12,7 +12,7 @@ import ultralightCopy from 'copy-to-clipboard-ultralight'
 import { toast } from "react-toastify"
 
 const EditPaper = () => {
-  const { state, dispatch, saveQuestion, getPaper, totalNo, getQuestion, deleteQuestion, paperId, paperDuration, setDuration, setPaperDuration } = useQuestion()
+  const { state, dispatch, saveQuestion, getPaper, totalNo, getQuestion, deleteQuestion, paperId, paperDuration, setDuration, setPaperDuration, paperName, setPaperName, setName } = useQuestion()
   const { currentUser } = useAuth()
   const { btnDisabled, appPath } = useGlobal()
   const [fm, setFm] = useState(0)
@@ -167,6 +167,7 @@ const EditPaper = () => {
                 <Card className='p-2 mt-4'>
                   <CardContent>
                     <h5>Other information</h5>
+                    <TextField className='mt-3' label='Paper Name' size='small' variant='filled' value={paperName} onChange={e => setPaperName(e.target.value)} autoComplete='off' fullWidth onBlur={setName} />
                     <h6 className='text-muted mt-3'>Full Marks = {fm}</h6>
                     <h6 className='text-muted mt-3'>Paper ID: {paperId}
                       <Button size='small' variant='text' className='mx-3' onClick={() => {

@@ -6,7 +6,8 @@ import BrandHeader from "../../../components/BrandHeader"
 import PrivateRouteForTeachers from "../../../components/PrivateRouteForTeachers"
 import { useResponses } from "../../../contexts/ResponsesContext"
 import { List, ListItem, ListItemText, Container, ListItemButton, ListItemIcon } from '@mui/material'
-import { AssignmentInd, Group } from '@mui/icons-material'
+import { AssignmentInd, Group, Search } from '@mui/icons-material'
+import { v4 as uuidv4 } from 'uuid'
 
 const ResponsesHome = () => {
   const router = useRouter()
@@ -32,20 +33,35 @@ const ResponsesHome = () => {
           </h2>
           <Container className='my-4'>
             <List>
-              {responses.map(response => {
-                const date = new Date(response.submitTimestamp).toString()
+              {responses.length > 0 ?
+                <>
+                  {responses.map(response => {
+                    const date = new Date(response.submitTimestamp).toString()
 
-                return (
-                  <ListItem sx={{ bgcolor: 'background.paper' }}>
-                    <ListItemButton onClick={() => window.open(`/responses/${qp_id}/${response._id}`)}>
-                      <ListItemIcon>
-                        <AssignmentInd />
-                      </ListItemIcon>
-                      <ListItemText primary={response.studentName} secondary={`${response.studentEmail} - ${date}`} />
-                    </ListItemButton>
-                  </ListItem>
-                )
-              })}
+                    return (
+                      <ListItem sx={{ bgcolor: 'background.paper' }} key={uuidv4()}>
+                        <ListItemButton onClick={() => window.open(`/responses/${qp_id}/${response._id}`)} disabled={response.state === 'Answers were submitted successfully.' ? false : true}>
+                          <ListItemIcon>
+                            <AssignmentInd />
+                          </ListItemIcon>
+                          {response.state === 'Answers were submitted successfully.' ?
+                            <ListItemText primary={response.studentName} secondary={`${response.studentEmail} - ${date}`} />
+                            :
+                            <ListItemText primary={response.studentName} secondary={`${response.studentEmail} - ${response.state}`} />
+                          }
+                        </ListItemButton>
+                      </ListItem>
+                    )
+                  })}
+                </>
+                :
+                <>
+                  <center className='my-5'>
+                    <Search style={{ fontSize: '40px' }} className='text-muted' />
+                    <h5 className='text-muted mt-2'>Nothing to show...</h5>
+                  </center>
+                </>
+              }
             </List>
           </Container>
         </Container>

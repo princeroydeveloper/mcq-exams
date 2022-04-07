@@ -177,9 +177,9 @@ router.post('/get_score', validateStudent, [
       if (exam.submitTimestamp) {
         state = 'Answers were submitted successfully.'
       } else if (exam.ticked[0] === 'time_expired' && exam.submitTimestamp) {
-        state = 'Answers were declined due to time factor.'
+        return res.status(400).json({ error: 'Answers were declined due to time factor.' })
       } else if (!exam.submitTimestamp) {
-        state = 'Not submitted answers yet.'
+        return res.status(400).json({ error: 'Not submitted answers yet.' })
       }
       const requiredQP = await QuestionPaper.findOne({ paper_id: req.body.qp_id })
       if (requiredQP) {

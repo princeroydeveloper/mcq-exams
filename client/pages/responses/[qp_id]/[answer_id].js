@@ -1,4 +1,4 @@
-import { Container, Alert, Card, CardContent, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Typography } from "@mui/material"
+import { Container, Alert, Card, CardContent, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Typography, Button } from "@mui/material"
 import Head from 'next/head'
 import { Scoreboard } from '@mui/icons-material'
 import { useRouter } from "next/router"
@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 const SpecificResponse = () => {
   const router = useRouter()
   const { qp_id, answer_id } = router.query
-  const { getScore, scoreData } = useResponses()
+  const { getScore, scoreData, deleteResponse } = useResponses()
 
   useEffect(() => {
     if ((!qp_id) && (!answer_id)) return
@@ -37,6 +37,13 @@ const SpecificResponse = () => {
                     <br /><br />
                   </center>
                   <Typography component='div' variant='h4' className='text-center' style={{ color: '#0168ee' }}>{scoreData.total_score}</Typography>
+                  <center>
+                    <Button onClick={() => {
+                      if (confirm("This would allow the student to attempt the exam once again.\nAre you sure to delete this response?") == true) {
+                        deleteResponse(qp_id, answer_id)
+                      }
+                    }} variant='contained' color='error' className='mt-4'>Delete Response</Button>
+                  </center>
                 </CardContent>
               </Card>
             </Container>

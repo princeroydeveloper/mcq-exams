@@ -101,6 +101,7 @@ function QuestionProvider({ children }) {
   const [totalNo, setTotalNo] = useState([])
   const [paperId, setPaperId] = useState('')
   const [paperDuration, setPaperDuration] = useState(0)
+  const [paperName, setPaperName] = useState('')
 
   async function saveQuestion() {
     try {
@@ -228,6 +229,7 @@ function QuestionProvider({ children }) {
         progress.hide()
         setTotalNo(res.total)
         setPaperId(res.paper_id)
+        setPaperName(res.name)
         return setPaperDuration(res.duration)
       } else if (stats === 500) {
         progress.hide()
@@ -338,10 +340,53 @@ function QuestionProvider({ children }) {
     }
   }
 
+  async function setName() {
+    try {
+      progress.show()
+      const req = await fetch(`${API_DOMAIN}/question_paper/rename`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN_KEY)
+        },
+        body: JSON.stringify({ qpId: state.qp_id, name: paperName })
+      })
+      const stats = req.status
+      const res = await req.json()
+      if (stats === 400) {
+        if (res.errors) {
+          progress.hide()
+          return toast.error(res.errors[0].msg)
+        } else if (res.error) {
+          progress.hide()
+          return toast.error(res.error)
+        }
+        progress.hide()
+        return toast.error('An unexpected error occurred...')
+      } else if (stats === 401 && res.error) {
+        return currentUser.signOut()
+      } else if (stats === 200 && res.success) {
+        progress.hide()
+        setPaperName(res.db_value)
+        return toast.success(res.success)
+      } else if (stats === 500) {
+        progress.hide()
+        return toast.error(res.error)
+      } else {
+        progress.hide()
+        return toast.error('An unexpected error occurred...')
+      }
+    } catch (error) {
+      progress.hide()
+      console.error(error)
+      return toast.error('An unexpected error occurred')
+    }
+  }
+
   const values = {
     state, dispatch,
-    saveQuestion, getPaper, getQuestion, deleteQuestion, setDuration,
-    totalNo, paperId, paperDuration, setPaperDuration
+    saveQuestion, getPaper, getQuestion, deleteQuestion, setDuration, paperName, setPaperName,
+    totalNo, paperId, paperDuration, setPaperDuration, setName
   }
 
   return (
