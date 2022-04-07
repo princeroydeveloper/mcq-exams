@@ -55,7 +55,7 @@ export const ConfirmJoinModal = ({ paper_id }) => {
           Confirm Joining Exam
         </DialogTitle>
         <DialogContent>
-          <h6 className='text-muted'>By clicking "Confirm & Join", your exam timer will start (as per the duration assigned by your teacher) and will autosubmit after the time ends.</h6>
+          <h6 className='text-muted'>By clicking {`"Confirm & Join"`}, your exam timer will start (as per the duration assigned by your teacher) and will autosubmit after the time ends.</h6>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => window.location.href = '/join'} disabled={btnDisabled}>Cancel</Button>

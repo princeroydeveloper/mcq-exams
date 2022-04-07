@@ -31,7 +31,7 @@ const SpecificResponse = () => {
               <Card className='p-4' variant='outlined'>
                 <CardContent>
                   <center className='text-muted'>
-                    <Scoreboard style={{ fontSize: '40px' }} />&nbsp;&nbsp;<span className='bold'>{scoreData.studentName}'s Examination Report</span>
+                    <Scoreboard style={{ fontSize: '40px' }} />&nbsp;&nbsp;<span className='bold'>{`${scoreData.studentName}'s`} Examination Report</span>
                     <br />
                     <small>{scoreData.state}</small>
                     <br /><br />
@@ -65,7 +65,7 @@ const SpecificResponse = () => {
                           <FormControlLabel disabled value='opt_d' label={item.opt_d} control={<Radio />} />
                         </RadioGroup>
                       </FormControl>
-                      <h6 className='text-muted mt-2'>{scoreData.studentName.split(' ')[0]}'s Answer: {item.your_opt.name}</h6>
+                      <h6 className='text-muted mt-2'>{`${scoreData.studentName.split(' ')[0]}'s`} Answer: {item.your_opt.name}</h6>
                       <h6 className='text-muted'>Marks obtained: {item.marksObtained}</h6>
                     </Alert>
                   </Container>

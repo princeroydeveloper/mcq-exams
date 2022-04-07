@@ -55,7 +55,7 @@ export const DeleteModal = () => {
           Delete Question Paper
         </DialogTitle>
         <DialogContent>
-          <h6 className='text-muted'>Are you sure to delete "{paper_data.name}" permanently? This will delete all the questions & responses related to that paper.</h6>
+          <h6 className='text-muted'>Are you sure to delete {`"${paper_data.name}"`} permanently? This will delete all the questions & responses related to that paper.</h6>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDelModal(false)} disabled={btnDisabled}>Cancel</Button>
