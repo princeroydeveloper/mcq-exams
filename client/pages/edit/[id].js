@@ -145,7 +145,7 @@ const EditPaper = () => {
                       <>
                         {totalNo.map((item, index) => {
                           return (
-                            <Fab size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' key={item._id} onClick={() => {
+                            <Fab disabled={btnDisabled} size='small' sx={{ boxShadow: 0 }} className='mx-3 mt-3' key={item._id} onClick={() => {
                               if (state.question_id === item._id) return
                               return getQuestion(item._id)
                             }} color={state.question_id === item._id ? 'primary' : 'inherit'}>{index + 1}</Fab>

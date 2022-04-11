@@ -7,7 +7,7 @@ require('dotenv').config({ path: './.env.local' })
 const cors = require('cors')
 
 const corsOptions = {
-  origin: ['https://mcq-exams.netlify.app'],
+  origin: ['https://mcq-exams.vercel.app'],
   optionsSuccessStatus: 200
 }
 

@@ -9,7 +9,7 @@ export const useGlobal = () => {
 
 function GlobalProvider({ children }) {
   const [loading, setLoading] = useState(true)
-  const API_DOMAIN = 'https://apis003-226cf.vercel.app'
+  const API_DOMAIN = 'http://localhost:5000'
   const [btnDisabled, setBtnDisabled] = useState(false)
   const progressOverlayRef = useRef()
   const [progress, setProgress] = useState({})
