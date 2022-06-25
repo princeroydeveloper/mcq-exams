@@ -6,7 +6,7 @@ An app for teachers to conduct online mcq exams (with unlimited questions, time 
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your .env file in the server directory
 
 `MONGO_URI  // Mongo connection url`
 
@@ -47,12 +47,6 @@ To start the development server, run this command for both client (next.js) & se
 ```bash
   npm run dev
 ```
-
-
-## Live Demo
-
-https://mcq-exams.vercel.app
-
 
 ## 🚀 My Other Apps
 I have many more apps. Do try once at: https://prince.bengalroys.com
